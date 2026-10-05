@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Venn – Community Events</title>
+  <meta name="description" content="Discover local events, connect with your community, and find something worth showing up for.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 32'%3E%3Ccircle cx='15' cy='16' r='13' fill='%2312946f' fill-opacity='.8'/%3E%3Ccircle cx='29' cy='16' r='13' fill='%238b7cf6' fill-opacity='.8'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <!-- Icon sprite (Feather-style line icons) -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="logo" viewBox="0 0 44 32">
+      <circle cx="15" cy="16" r="13" class="logo-a"/>
+      <circle cx="29" cy="16" r="13" class="logo-b"/>
+    </symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#/discover" aria-label="Venn – home">
+        <svg class="brand-logo" aria-hidden="true"><use href="#logo"/></svg>
+        <span class="brand-name">VENN</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main">
+        <a href="#/discover" data-view="discover">Discover</a>
+        <a href="#/organiser" data-view="organiser" data-role="organiser" hidden>My events</a>
+        <a href="#/admin" data-view="admin" data-role="admin" hidden>Review</a>
+        <a href="#/about" data-view="about">About</a>
+      </nav>
+
+      <button class="btn btn-primary btn-compact" id="header-create" type="button">
+        <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg> New event
+      </button>
+
+      <label class="role-picker">
+        <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
+        <span class="role-label">Continue as</span>
+        <select id="role-select" aria-label="Demo role">
+          <option value="visitor">Visitor</option>
+          <option value="organiser:organiser-1">Organiser · organiser-1</option>
+          <option value="organiser:organiser-2">Organiser · organiser-2</option>
+          <option value="admin">Administrator</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- DISCOVER (public) -->
+    <section id="view-discover" class="view" hidden>
+      <div class="hero">
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <p class="eyebrow">Community Events Platform</p>
+            <h1>Find your<br>common ground.</h1>
+            <p class="lead">Discover local events, connect with your community, and find something worth showing up for.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#events">Explore Events <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              <button class="btn btn-outline" id="hero-create" type="button">Create an Event</button>
+            </div>
+          </div>
+
+          <div class="hero-art">
+            <svg viewBox="0 0 420 370" class="venn" aria-hidden="true">
+              <defs>
+                <clipPath id="clip-people"><circle cx="210" cy="130" r="120"/></clipPath>
+                <clipPath id="clip-interests"><circle cx="145" cy="235" r="120"/></clipPath>
+              </defs>
+              <circle cx="210" cy="130" r="120" class="venn-people"/>
+              <circle cx="145" cy="235" r="120" class="venn-interests"/>
+              <circle cx="275" cy="235" r="120" class="venn-places"/>
+              <g clip-path="url(#clip-people)"><g clip-path="url(#clip-interests)"><circle cx="275" cy="235" r="120" class="venn-core"/></g></g>
+              <use href="#i-users" x="198" y="42" width="24" height="24" class="venn-icon"/>
+              <text x="210" y="86" class="venn-label">People</text>
+              <use href="#i-heart" x="82" y="236" width="24" height="24" class="venn-icon"/>
+              <text x="94" y="280" class="venn-label">Interests</text>
+              <use href="#i-pin" x="314" y="236" width="24" height="24" class="venn-icon"/>
+              <text x="326" y="280" class="venn-label">Places</text>
+              <text x="210" y="208" class="venn-core-label">Community</text>
+            </svg>
+            <div class="hero-photo-wrap">
+              <img class="hero-photo" src="/images/hero.jpg" width="1200" height="800" decoding="async"
+                   alt="Friends watching the sunset together from a hilltop">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container section" id="events">
+        <h2>What’s happening?</h2>
+        <p class="muted">Discover upcoming events in your community.</p>
+        <div class="chips" id="chips" role="group" aria-label="Filter events"></div>
+        <div id="event-grid" class="grid" aria-live="polite"></div>
+        <p id="discover-empty" class="empty" hidden>No events match this filter yet.</p>
+      </div>
+    </section>
+
+    <!-- ORGANISER -->
+    <section id="view-organiser" class="view container section" hidden>
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Your events</h1>
+          <p class="muted">New events are reviewed by an administrator before Visitors can see them.</p>
+        </div>
+        <button class="btn btn-primary" id="new-event" type="button">New event</button>
+      </div>
+
+      <form id="event-form" class="panel form" novalidate hidden>
+        <h2 class="section-title" id="form-title">Create an event</h2>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <div class="field">
+          <label for="f-title">Title</label>
+          <input id="f-title" name="title" type="text" maxlength="200" autocomplete="off">
+          <p class="field-error" data-for="title"></p>
+        </div>
+        <div class="field">
+          <label for="f-description">Description</label>
+          <textarea id="f-description" name="description" rows="4"></textarea>
+          <p class="field-error" data-for="description"></p>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-category">Category</label>
+            <select id="f-category" name="category"></select>
+            <p class="field-error" data-for="category"></p>
+          </div>
+          <div class="field">
+            <label for="f-starts-at">Date and time</label>
+            <input id="f-starts-at" name="starts_at" type="datetime-local">
+            <p class="field-error" data-for="starts_at"></p>
+          </div>
+          <div class="field">
+            <label for="f-capacity">Capacity</label>
+            <input id="f-capacity" name="capacity" type="number" inputmode="numeric" step="1">
+            <p class="field-error" data-for="capacity"></p>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit" id="form-submit">Submit for review</button>
+          <button class="btn btn-outline" type="button" id="form-cancel">Cancel</button>
+        </div>
+      </form>
+
+      <div id="organiser-list"></div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="view-admin" class="view container section" hidden>
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Review events</h1>
+          <p class="muted">Publish pending events to make them visible to Visitors.</p>
+        </div>
+      </div>
+      <div class="chips" id="admin-chips" role="group" aria-label="Filter by status"></div>
+      <div id="admin-list"></div>
+
+      <h2 class="section-title subhead">Recent activity</h2>
+      <ul id="activity-list" class="activity"></ul>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="view-about" class="view container section prose" hidden>
+      <h1 class="page-title">About this demo</h1>
+      <p>Venn is a small Community Events Platform built as a take-home exercise. Visitors browse published events and register anonymous interest, Organisers create and manage events, and Administrators review and publish them.</p>
+      <h2 class="section-title">Roles</h2>
+      <p>There is no sign-in. The “Continue as” menu switches the demo role, and the chosen role is sent with each request. The server enforces what each role may do, but this is for demonstration only and is not real security.</p>
+      <h2 class="section-title">Privacy</h2>
+      <p>Registering interest is anonymous. Only a registration ID, the event ID and a timestamp are stored: no names, emails or other personal details. All events and data shown here are fictional.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="brand">
+        <svg class="brand-logo" aria-hidden="true"><use href="#logo"/></svg>
+        <span class="brand-name">VENN</span>
+      </span>
+      <span class="muted">Find your common ground.</span>
+      <span class="muted footer-note">Demo project · fictional data · registrations are anonymous</span>
+    </div>
+  </footer>
+
+  <dialog id="event-dialog" aria-labelledby="dialog-title">
+    <button class="dialog-close" type="button" id="dialog-close" aria-label="Close">×</button>
+    <div id="dialog-body"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
