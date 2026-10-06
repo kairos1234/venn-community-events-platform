@@ -7,6 +7,12 @@ A small Community Events Platform. **Visitors** browse published events and regi
 - A plain HTML/CSS/JavaScript frontend served by the backend (no build step)
 - All data is fictional; registrations store no personal information
 
+## Demo
+
+A recording of the completed working application is available here:
+
+[View application demonstration](https://drive.google.com/file/d/1iBRsI92bhOggpfp_DXpA80z4TN62G9Vb/view?usp=sharing)
+
 ## 1. Setup and run
 
 **Prerequisites:** Python 3.12 or newer (tested on 3.12, 3.13 and 3.14, with Django 6.0 and 6.1). If `pip install` says it "could not find a version that satisfies Django>=6.0", your Python is older than 3.12. Nothing else: SQLite ships with Python, and the frontend needs no Node.js or build.
