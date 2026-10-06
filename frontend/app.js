@@ -198,10 +198,54 @@ async function renderDiscover() {
   const { events } = await api(`/events?${query}`);
   if (requestId !== discoverRequest) return; // a newer filter click superseded this one
 
+  renderComingUp(events);
+
   $("event-grid").replaceChildren(...events.map(eventCard));
   $("discover-empty").hidden = events.length > 0;
 }
 
+function renderComingUp(events) {
+  const container = $("coming-up-list");
+  const count = $("coming-up-count");
+
+  const upcomingEvents = events
+    .filter((event) => new Date(event.starts_at) > new Date())
+    .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at))
+    .slice(0, 3);
+
+  count.textContent = `${upcomingEvents.length} ${upcomingEvents.length === 1 ? "event" : "events"}`;
+
+  container.replaceChildren(
+    ...upcomingEvents.map((event) =>
+      h("button", {
+        class: "coming-up-item",
+        type: "button",
+        onclick: () => openEventDialog(event.id)
+      },
+        h("div", { class: "coming-up-date" },
+          h("span", { class: "coming-up-day" }, new Date(event.starts_at).getDate()),
+          h("span", { class: "coming-up-month" },
+            new Date(event.starts_at).toLocaleDateString("en-US", { month: "short" })
+          )
+        ),
+        h("div", { class: "coming-up-details" },
+          h("strong", { text: event.title }),
+          h("span", { text: `${formatTime(event.starts_at)} · ${event.category}` })
+        ),
+        icon("arrow")
+      )
+    )
+  );
+
+  if (upcomingEvents.length === 0) {
+    container.append(
+      h("p", {
+        class: "coming-up-empty",
+        text: "No upcoming events yet."
+      })
+    );
+  }
+}
 const hasStarted = (event) => new Date(event.starts_at) <= new Date();
 
 // Why registration is not possible right now (the server enforces this too), or null if it is.
@@ -503,11 +547,42 @@ async function deleteEvent(event) {
   }
 }
 
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+
+  const toggle = $("theme-toggle");
+  if (!toggle) return;
+
+  const dark = theme === "dark";
+
+toggle.innerHTML = dark
+  ? `<svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg>`
+  : `<svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg>`;
+
+toggle.setAttribute(
+    "aria-label",
+    dark ? "Switch to light mode" : "Switch to dark mode"
+  );
+}
 // ---------------------------------------------------------------------------
 // Start-up
 // ---------------------------------------------------------------------------
 
 function init() {
+    let storedTheme = null;
+  try { storedTheme = localStorage.getItem("theme"); } catch { /* storage unavailable */ }
+
+  applyTheme(storedTheme === "dark" ? "dark" : "light");
+
+  $("theme-toggle").addEventListener("click", () => {
+    const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+
+    applyTheme(nextTheme);
+
+    try {
+      localStorage.setItem("theme", nextTheme);
+    } catch { /* storage unavailable */ }
+  });
   $("f-category").replaceChildren(...CATEGORIES.map((c) => h("option", { value: c, text: c })));
 
   let stored = null;

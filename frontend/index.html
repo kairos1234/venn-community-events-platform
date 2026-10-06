@@ -20,6 +20,14 @@
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24">
+  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+</symbol>
+
+<symbol id="i-sun" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="4"/>
+  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+</symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
     <symbol id="logo" viewBox="0 0 44 32">
       <circle cx="15" cy="16" r="13" class="logo-a"/>
@@ -46,6 +54,12 @@
       <button class="btn btn-primary btn-compact" id="header-create" type="button">
         <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg> New event
       </button>
+
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+        
+      </button>
+
+      <label class="role-picker">
 
       <label class="role-picker">
         <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
@@ -105,8 +119,21 @@
         <h2>What’s happening?</h2>
         <p class="muted">Discover upcoming events in your community.</p>
         <div class="chips" id="chips" role="group" aria-label="Filter events"></div>
-        <div id="event-grid" class="grid" aria-live="polite"></div>
-        <p id="discover-empty" class="empty" hidden>No events match this filter yet.</p>
+
+<section class="coming-up" aria-labelledby="coming-up-title">
+  <div class="coming-up-header">
+    <div>
+      <span class="eyebrow">What's next</span>
+      <h2 id="coming-up-title">Coming Up</h2>
+    </div>
+    <span class="coming-up-count" id="coming-up-count">0 events</span>
+  </div>
+
+  <div id="coming-up-list" class="coming-up-list" aria-live="polite"></div>
+</section>
+
+<div id="event-grid" class="grid" aria-live="polite"></div>
+<p id="discover-empty" class="empty" hidden>No events match this filter yet.</p>
       </div>
     </section>
 
