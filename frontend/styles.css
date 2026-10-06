@@ -233,3 +233,18 @@ main { flex: 1 0 auto; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+.btn-danger {
+  background: #b42318;
+  color: #fff;
+  border: 1px solid #b42318;
+}
+
+.btn-danger:hover {
+  background: #8f1d14;
+}
+
+.actions-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}

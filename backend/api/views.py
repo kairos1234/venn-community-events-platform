@@ -90,7 +90,11 @@ class EventDetailView(ApiView):
         require_role(actor, ORGANISER)
         return JsonResponse(event_to_dict(events.update_event(event_id, json_body(request), actor)))
 
-
+        # --- Administrator: delete event ---
+    def delete(self, request, event_id):
+        require_role(current_actor(request), ADMIN)
+        events.delete_event(event_id)
+        return JsonResponse({"message": "Event deleted successfully."})
 class EventRegistrationsView(ApiView):
     def post(self, request, event_id):
         registration = registrations.register_for_event(event_id)
@@ -126,6 +130,7 @@ class EventPublishView(ApiView):
     def post(self, request, event_id):
         require_role(current_actor(request), ADMIN)
         return JsonResponse(event_to_dict(events.publish_event(event_id)))
+
 
 
 class AdminActivityView(ApiView):

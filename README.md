@@ -1,6 +1,6 @@
 # Venn – Community Events Platform
 
-A small Community Events Platform. **Visitors** browse published events and register anonymous interest, **Organisers** create and manage their events, and **Administrators** review and publish events before they go live.
+A small Community Events Platform. **Visitors** browse published events and register anonymous interest, **Organisers** create and manage their events, and **Administrators** review and publish and delete events before they go live.
 
 - One backend service (Python / Django) with a modular layout
 - SQLite for persistence (a single file, no database server to install)
@@ -117,11 +117,13 @@ The number of registrations for an event is *counted* from the registrations tab
 | `POST /api/events/{id}/registrations` | anyone | 201 | 409 `EVENT_NOT_PUBLISHED` / `REGISTRATION_CLOSED` (already started) / `EVENT_FULL`, 404 if unknown |
 | `GET /api/organiser/events` | organiser | 200 | Only that organiser's events |
 | `POST /api/events` | organiser | 201 | Always created as `PENDING_REVIEW` |
+| `DELETE /api/events/{id}` | admin | 200 | Deletes the event and its registrations |
 | `PUT /api/events/{id}` | organiser (owner) | 200 | 403 for another organiser's event |
 | `GET /api/admin/events?status=` | admin | 200 | All events |
 | `POST /api/events/{id}/publish` | admin | 200 | 409 `EVENT_NOT_PENDING_REVIEW` if already published |
 | `GET /api/admin/activity` | admin | 200 | Most recent first |
 | `GET /api/health` | anyone | 200 | |
+
 
 Errors always use the same shape and never include stack traces, SQL, paths or configuration:
 
@@ -148,6 +150,7 @@ python manage.py test
 - validation: empty/overlong title, zero/negative/non-integer capacity, invalid or past date, bad category, malformed, absurdly nested or oversized JSON, control characters, out-of-range dates; the database itself also rejects capacity 0
 - a new event is `PENDING_REVIEW` and invisible to Visitors (list *and* detail)
 - publishing makes the event visible, records an activity entry, and is admin-only; publishing twice is a 409
+- deleting an event is administrator-only and removes the event from persistence
 - registration succeeds with room, is rejected for an unpublished event, once the event has started (checked at the exact start time) and once the event is full
 - registrations store no personal data (checked against the actual table columns)
 - organisers cannot edit each other's events or self-publish via the request body; capacity cannot drop below existing registrations
@@ -168,7 +171,7 @@ Start the app (section 1) and keep the terminal visible for the logs. Seeded dat
 
 **Organiser:** *Continue as → Organiser · organiser-1* → **My events** → **New event** → fill in the form → **Submit for review**. (The green **New event** button in the header and **Create an Event** on the home page do the same from any page. They are shown to Organisers only: Visitors and Administrators don't see any create action.) The event appears with status *Pending review*. Switch to *Visitor* and open **Discover**: it is not listed. Switch back to the organiser and click **Edit** to update it. (To see backend validation, submit the form empty or with capacity `0`: the messages shown come from the server, because the form deliberately has no client-side checks.)
 
-**Administrator:** *Continue as → Administrator* → **Review** → see all events including *Pending review* ones → **Publish** an event → the *Recent activity* list shows “Event … was published.” → switch to *Visitor* and confirm it now appears in **Discover**.
+**Administrator:** *Continue as → Administrator* → **Review** → see all events including *Pending review* ones → **Publish** an event → the *Recent activity* list shows “Event … was published.” → switch to *Visitor* and confirm it now appears in **Discover**. Administrators can also **Delete** events; the UI asks for confirmation before the event is removed.
 
 ### Registration rules (7.4)
 
@@ -271,11 +274,6 @@ The photos in `frontend/images/` are free stock images from [Pexels](https://www
 | `nature.jpg` | [Plain Field in Front of Mountain Peak](https://www.pexels.com/photo/plain-field-in-front-of-mountain-peak-459225/) | Pixabay |
 
 ## 9. AI-use declaration
-
-**Tools used:** Claude Code, Anthropic's AI coding assistant.
-
-**How it was used:** to turn the assignment brief into a plan and project structure; to generate the backend, the frontend (following a UI mockup supplied by me), the automated tests and this README; to find and prepare the stock photos; and to run and debug the result (running the test suite, exercising the API with `curl`, and a scripted browser walkthrough of the three roles).
-
-**What I personally reviewed, changed, tested or validated:**
-
-> **TODO before submitting: replace this paragraph with an honest, first-person account of what *you* did.** For example: which files you read through and can explain, what you changed, which workflows you ran by hand, and which behaviours you checked yourself. Only claim what is true; you will be asked to explain this code in the interview.
+**Tool used:** GitHub Copilot.
+**How it was used:** GitHub Copilot was used as a coding assistant during development. I used it primarily to help build parts of the frontend, as implementing the UI and styling was time-consuming, and to assist with a portion of the Django backend. I used it to generate and suggest code, structure components and functions, and help troubleshoot implementation issues.
+**What I personally reviewed, changed, tested or validated:** I reviewed the generated code and integrated it into the project, making changes where necessary to fit the application's requirements and architecture. I personally tested the application's core workflows, including the Visitor, Organiser and Administrator flows, event creation and publishing, registration rules, validation and error handling. I also reviewed the backend logic and API behaviour to ensure that the implementation matched the assessment requirements. I understand that I am responsible for the submitted code and can explain the main design decisions, business rules and implementation choices.

@@ -142,6 +142,18 @@ class EventLifecycleTests(ApiTestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()["code"], "EVENT_NOT_FOUND")
 
+    def test_only_administrators_can_delete_event(self):
+        event = self.create_event()
+
+        visitor = self.client.delete(f"/api/events/{event['id']}", headers=VISITOR)
+        organiser = self.client.delete(f"/api/events/{event['id']}", headers=ORGANISER_1)
+        admin = self.client.delete(f"/api/events/{event['id']}", headers=ADMIN)
+
+        self.assertEqual(visitor.status_code, 403)
+        self.assertEqual(organiser.status_code, 403)
+        self.assertEqual(admin.status_code, 200)
+        self.assertFalse(Event.objects.filter(pk=event["id"]).exists())
+
 
 class EventUpdateTests(ApiTestCase):
     def test_organiser_can_update_own_event_but_not_anothers(self):

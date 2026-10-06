@@ -331,8 +331,28 @@ function rowActions(event, admin) {
   if (!admin) {
     return h("button", { class: "btn btn-outline btn-sm", type: "button", onclick: () => openForm(event) }, "Edit");
   }
-  if (event.status !== "PENDING_REVIEW") return null;
-  return h("button", { class: "btn btn-primary btn-sm", type: "button", onclick: (e) => publish(event, e.currentTarget) }, "Publish");
+
+  const actions = [];
+
+  if (event.status === "PENDING_REVIEW") {
+    actions.push(
+      h("button", {
+        class: "btn btn-primary btn-sm",
+        type: "button",
+        onclick: (e) => publish(event, e.currentTarget)
+      }, "Publish")
+    );
+  }
+
+  actions.push(
+    h("button", {
+      class: "btn btn-danger btn-sm",
+      type: "button",
+      onclick: () => deleteEvent(event)
+    }, "Delete")
+  );
+
+  return h("div", { class: "actions-group" }, ...actions);
 }
 
 // ---------------------------------------------------------------------------
@@ -465,6 +485,22 @@ async function publish(event, button) {
     toast(err.message, true);
   }
   await render();
+}
+
+async function deleteEvent(event) {
+  const confirmed = window.confirm(
+    `Are you sure you want to delete "${event.title}"? This cannot be undone.`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await api(`/events/${encodeURIComponent(event.id)}`, { method: "DELETE" });
+    toast(`Event ${event.id} deleted.`);
+    await render();
+  } catch (err) {
+    toast(err.message, true);
+  }
 }
 
 // ---------------------------------------------------------------------------

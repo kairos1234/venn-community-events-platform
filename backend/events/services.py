@@ -52,6 +52,12 @@ def publish_event(event_id: str) -> Event:
     log.info("event published event_id=%s outcome=success", event_id)
     return _fetch(event_id)
 
+def delete_event(event_id: str) -> None:
+    with transaction.atomic():
+        event = _lock_or_404(event_id)
+        event.delete()
+
+    log.info("event deleted event_id=%s outcome=success", event_id)
 
 def get_event(event_id: str, actor: Actor) -> Event:
     event = Event.objects.with_registration_count().filter(pk=event_id).first()
